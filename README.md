@@ -3,7 +3,7 @@ A modified version of the Standard Shader that can be found bundled with Unity. 
 
 This <b>variant of the Unity Standard Shader</b> was created for a&nbsp;specific use case in the <i>Bygone</i> game&nbsp;project, namely using the detail maps to&nbsp;apply various high quality detail (detail pieces&nbsp;of wallpaper, paint remnants, scattered paper, small debris etc.) to large surfaces with tiled square base maps (the details being applied according to&nbsp;the&nbsp;detail UV set). 
 
-The purpose was to increase variety in&nbsp;the&nbsp;environment, while maintaining a&nbsp;single mesh workflow and providing sufficient optimization. The shader functionality was proposed and partly designed by my fellow game-designer, writer, and 3d artist @M-Klekowicki. He also provided help with the research and testing.
+The purpose was to increase variety in&nbsp;the&nbsp;environment, while maintaining a&nbsp;single mesh workflow and providing sufficient optimization. The shader functionality was proposed and partly designed by my fellow game-designer, writer, and 3d artist <a href="https://github.com/M-Klekowicki">M-Klekowicki</a>. He also provided help with the research and testing.
 
 The changes made to the code are as&nbsp;follows:
 
