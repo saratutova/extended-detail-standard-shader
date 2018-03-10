@@ -1,4 +1,4 @@
-# extended-standard-shader
+# extended-detail-standard-shader
 A modified version of the Standard Shader that can be found bundled with Unity. Extended mask, uv, and map capabilities.
 
 This <b>variant of the Unity Standard Shader</b> was created for a&nbsp;specific use case in the <i>Bygone</i> game&nbsp;project, namely using the detail maps to&nbsp;apply various high quality detail (detail pieces&nbsp;of wallpaper, paint remnants, scattered paper, small debris etc.) to large surfaces with tiled square base maps (the details being applied according to&nbsp;the&nbsp;detail UV set). 
