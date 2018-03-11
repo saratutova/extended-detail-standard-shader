@@ -1,6 +1,6 @@
 # extended-detail-standard-shader
 A modified version of the Standard Shader that can be found bundled with Unity. Extended mask, uv, and map capabilities.
-<img scr= "https://raw.githubusercontent.com/sarajujeczka/extended-detail-standard-shader/master/2018-03-11_00-53-55.gif">
+
 This <b>variant of the Unity Standard Shader</b> was created for a&nbsp;specific use case in the <i>Bygone</i> game&nbsp;project, namely using the detail maps to&nbsp;apply various high quality detail (detail pieces&nbsp;of wallpaper, paint remnants, scattered paper, small debris etc.) to large surfaces with tiled square base maps (the details being applied according to&nbsp;the&nbsp;detail UV set). 
 
 The purpose was to increase variety in&nbsp;the&nbsp;environment, while maintaining a&nbsp;single mesh workflow and providing sufficient optimization. The shader functionality was proposed and partly designed by my fellow game-designer, writer, and 3d artist <a href="https://github.com/M-Klekowicki">M-Klekowicki</a>. He also provided help with the research and testing.
@@ -20,5 +20,6 @@ Planned additions:
 <li>Mixing method choice.</li>
 <li>Implementing similar changes to the metallic variant of the standard shader.</li>
 </ul>
+<img scr= "https://raw.githubusercontent.com/sarajujeczka/extended-detail-standard-shader/master/2018-03-11_00-53-55.gif">
 <img src= "https://raw.githubusercontent.com/sarajujeczka/extended-detail-standard-shader/master/2018-03-11_00-49-40.gif">
 
