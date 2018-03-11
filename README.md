@@ -24,3 +24,5 @@ Planned additions:
 <img src= "https://raw.githubusercontent.com/sarajujeczka/extended-detail-standard-shader/master/2018-03-11_00-49-40.gif">
 <b>Extended Detail Standard Shader:</b>
 <img src= "https://raw.githubusercontent.com/sarajujeczka/extended-detail-standard-shader/master/2018-03-11_00-53-55.gif">
+
+You can download <a href="https://github.com/sarajujeczka/extended-detail-standard-shader/raw/master/edss.unitypackage">unitypackage</a>.
