@@ -20,4 +20,4 @@ Planned additions:
 <li>Mixing method choice.</li>
 <li>Implementing similar changes to the metallic variant of the standard shader.</li>
 </ul>
-[Alt Text](extended-detail-standard-shader/2018-03-11_00-49-40.gif) [Alt Text](extended-detail-standard-shader/2018-03-11_00-53-55.gif)
+![Alt Text](https://raw.githubusercontent.com/sarajujeczka/extended-detail-standard-shader/master/2018-03-11_00-49-40.gif) ![Alt Text](https://raw.githubusercontent.com/sarajujeczka/extended-detail-standard-shader/master/2018-03-11_00-53-55.gif)
