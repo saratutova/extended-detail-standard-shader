@@ -29,6 +29,7 @@ sampler2D   _DetailAlbedoMap;
 float4      _DetailAlbedoMap_ST;
 
 sampler2D   _DetailSpecMap;
+half		_DetailSmoothness;
 half		_DetailSmoothMapScale;
 //float4      _DetailSpecMap_ST;
 
@@ -68,7 +69,6 @@ struct VertexInput
 	float2 uv0      : TEXCOORD0;
 	float2 uv1      : TEXCOORD1;
 	float2 uv3      : TEXCOORD3;
-	//float2 uv4      : TEXCOORD4;
 #if defined(DYNAMICLIGHTMAP_ON) || defined(UNITY_PASS_META)
 	float2 uv2      : TEXCOORD2;
 #endif
@@ -86,12 +86,8 @@ float4 TexCoords(VertexInput v)
 		texcoord.zw = TRANSFORM_TEX(v.uv0, _DetailAlbedoMap);
 	else if (_UVSec == 1)
 		texcoord.zw = TRANSFORM_TEX(v.uv1, _DetailAlbedoMap);
-	/*else if (_UVSec == 2)
-		texcoord.zw = TRANSFORM_TEX(v.uv2, _DetailAlbedoMap);*/
-	else //if (_UVSec == 3)
+	else
 		texcoord.zw = TRANSFORM_TEX(v.uv3, _DetailAlbedoMap);
-	/*else
-		texcoord.zw = TRANSFORM_TEX(v.uv4, _DetailAlbedoMap);*/
 	return texcoord;
 }
 
@@ -103,24 +99,26 @@ half DetailMask(float2 uv)
 half3 Albedo(float4 texcoords)
 {
 	half3 albedo = _Color.rgb * tex2D(_MainTex, texcoords.xy).rgb;
+	
 #if _DETAIL
-#if (SHADER_TARGET < 30)
-	// SM20: instruction count limitation
-	// SM20: no detail mask
-	half mask = 1;
-#else
-	half mask = DetailMask(texcoords.zw);
-#endif
-	half3 detailAlbedo = tex2D(_DetailAlbedoMap, texcoords.zw).rgb;
-#if _DETAIL_MULX2
-	albedo *= LerpWhiteTo(detailAlbedo * unity_ColorSpaceDouble.rgb, mask);
-#elif _DETAIL_MUL
-	albedo *= LerpWhiteTo(detailAlbedo, mask);
-#elif _DETAIL_ADD
-	albedo += detailAlbedo * mask;
-#elif _DETAIL_LERP
-	albedo = lerp(albedo, detailAlbedo, mask);
-#endif
+	#if (SHADER_TARGET < 30)
+		// SM20: instruction count limitation
+		// SM20: no detail mask
+		half mask = 1;
+	#else
+		half mask = DetailMask(texcoords.zw);
+	#endif
+		half3 detailAlbedo = tex2D(_DetailAlbedoMap, texcoords.zw).rgb;
+	#if _DETAIL_MULX2
+		albedo *= LerpWhiteTo(detailAlbedo * unity_ColorSpaceDouble.rgb, mask);
+	#elif _DETAIL_MUL
+		albedo *= LerpWhiteTo(detailAlbedo, mask);
+	#elif _DETAIL_ADD
+		albedo += detailAlbedo * mask;
+	#elif _DETAIL_LERP
+		albedo = lerp(albedo, detailAlbedo, mask); 
+		//albedo *= LerpWhiteTo(detailAlbedo * unity_ColorSpaceDouble.rgb, mask);
+	#endif
 #endif
 	return albedo;
 }
@@ -172,23 +170,27 @@ half4 SpecularGloss(float4 texcoords)
 	#else
 		half mask = DetailMask(texcoords.zw);
 	#endif
-	//If there is a spec detail map
+	//If there is a specular detail map
 	#ifdef _SPECDETAILMAP
 		half3 specAlbedo = tex2D(_DetailSpecMap, texcoords.zw).rgb;
 		#if _DETAIL_MULX2
-		sg.rgb *= LerpWhiteTo(specAlbedo * unity_ColorSpaceDouble.rgb, mask);
+			sg.rgb *= LerpWhiteTo(specAlbedo * unity_ColorSpaceDouble.rgb, mask);
 		#elif _DETAIL_MUL
-		sg.rgb *= LerpWhiteTo(specAlbedo, mask);
+			sg.rgb *= LerpWhiteTo(specAlbedo, mask);
 		#elif _DETAIL_ADD
-		sg.rgb += specAlbedo * mask;
+			sg.rgb += specAlbedo * mask;
 		#elif _DETAIL_LERP
-		sg.rgb = lerp(sg, lerp(sg, specAlbedo, mask), _DetailSmoothMapScale);
+			//sg.rgb = lerp(sg, lerp(sg, specAlbedo, mask), _DetailSmoothMapScale);
+			sg.rgb = lerp(sg, specAlbedo, mask);
 		#endif
+			sg.a = lerp(sg.a, tex2D(_DetailSpecMap, texcoords.zw).a * _DetailSmoothMapScale, mask);
 	//if there is no spec detail map it should use detail spec color
 	#else
-		sg.rgb = lerp(sg, lerp(sg, _DetailSpecColor.rgb, mask), _DetailSmoothMapScale);
+		sg.rgb = lerp(sg, lerp(sg, _DetailSpecColor.rgb, mask), _DetailSpecColor.a);
+		sg.a = lerp(sg.a, _DetailSmoothness, mask);
 	#endif
 #endif
+
 
 	return sg;
 }
@@ -247,22 +249,14 @@ half3 NormalInTangentSpace(float4 texcoords)
 {
 	half3 normalTangent = UnpackScaleNormal(tex2D(_BumpMap, texcoords.xy), _BumpScale);
 
-#if _DETAIL && defined(UNITY_ENABLE_DETAIL_NORMALMAP)
+#if _DETAIL //&& defined(UNITY_ENABLE_DETAIL_NORMALMAP)
 	half mask = DetailMask(texcoords.zw);
 	half3 detailNormalTangent = UnpackScaleNormal(tex2D(_DetailNormalMap, texcoords.zw), _DetailNormalMapScale);
-#if _DETAIL_LERP
-	normalTangent = lerp(
-		normalTangent,
-		detailNormalTangent,
-		mask);
-
-#else
-	normalTangent = lerp(
-		normalTangent,
-		BlendNormals(normalTangent, detailNormalTangent),
-		mask);
-#endif
-
+	#if _DETAIL_LERP
+		normalTangent = lerp(normalTangent, detailNormalTangent, mask);
+	#else
+		normalTangent = lerp(normalTangent, BlendNormals(normalTangent, detailNormalTangent), mask);
+	#endif
 #endif
 
 	return normalTangent;

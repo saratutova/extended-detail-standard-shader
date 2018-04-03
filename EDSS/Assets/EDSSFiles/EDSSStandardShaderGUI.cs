@@ -56,8 +56,10 @@ namespace UnityEditor
             public static GUIContent emissionText = new GUIContent("Color", "Emission (RGB)");
             public static GUIContent detailMaskText = new GUIContent("Detail Mask", "Mask for Secondary Maps (A)");
             public static GUIContent detailAlbedoText = new GUIContent("Detail Albedo LERP", "Albedo (RGB) LERPed");
-            public static GUIContent detailSpecText = new GUIContent("Detail Spec", "Detail Specular (RGB) and Smoothness (A)");
-            public static GUIContent detailSpecScaleText = new GUIContent("Spec Scale", "Detail Specular scale factor");
+            public static GUIContent detailSpecText = new GUIContent("Detail Spec", "Detail Specular (RGB). Base Specular / Detail Specular Balance (A)");
+            public static GUIContent detailSpecMapText = new GUIContent("Detail Spec", "Detail Specular (RGB) and Smoothness (A)");
+            public static GUIContent detailSmoothnessText = new GUIContent("Smoothness", "Detail Smoothness value");
+            public static GUIContent detailSmoothnessScaleText = new GUIContent("Detail Smoothness", "Detail Specular Smoothess");
             public static GUIContent detailNormalMapText = new GUIContent("Normal Map", "Normal Map");
 
             public static string primaryMapsText = "Main Maps";
@@ -95,7 +97,8 @@ namespace UnityEditor
         MaterialProperty detailMask = null;
         MaterialProperty detailAlbedoMap = null;
         MaterialProperty detailSpecMap = null;
-        MaterialProperty detailSpecScale = null;
+        MaterialProperty detailSmoothness = null;
+        MaterialProperty detailSmoothnessScale = null;
         MaterialProperty detailSpecularColor = null;
         MaterialProperty detailNormalMapScale = null;
         MaterialProperty detailNormalMap = null;
@@ -142,7 +145,8 @@ namespace UnityEditor
             detailMask = FindProperty("_DetailMask", props);
             detailAlbedoMap = FindProperty("_DetailAlbedoMap", props);
             detailSpecMap = FindProperty("_DetailSpecMap", props);
-            detailSpecScale = FindProperty("_DetailSmoothMapScale", props, false);
+            detailSmoothness = FindProperty("_DetailSmoothness", props);
+            detailSmoothnessScale = FindProperty("_DetailSmoothMapScale", props, false);
             detailSpecularColor = FindProperty("_DetailSpecColor", props, false);
             detailNormalMapScale = FindProperty("_DetailNormalMapScale", props);
             detailNormalMap = FindProperty("_DetailNormalMap", props);
@@ -380,7 +384,7 @@ namespace UnityEditor
             bool hasDetailGlossMap = false;
             if (m_WorkflowMode == WorkflowMode.Specular) {
                 hasDetailGlossMap = detailSpecMap.textureValue != null;
-                m_MaterialEditor.TexturePropertySingleLine(Styles.detailSpecText, detailSpecMap, hasDetailGlossMap ? null : detailSpecularColor);
+                m_MaterialEditor.TexturePropertySingleLine(hasDetailGlossMap ? Styles.detailSpecMapText : Styles.detailSpecText, detailSpecMap, hasDetailGlossMap ? null : detailSpecularColor);
 
             }
             else if (m_WorkflowMode == WorkflowMode.Metallic) {
@@ -389,24 +393,22 @@ namespace UnityEditor
                 //hasDetailGlossMap = detailSpecMap.textureValue != null;
             }
 
-            /*
-            bool showSmoothnessScale = hasDetailGlossMap;
+            bool showDetailSmoothnessScale = hasDetailGlossMap;
             if (smoothnessMapChannel != null) {
                 int smoothnessChannel = (int)smoothnessMapChannel.floatValue;
                 if (smoothnessChannel == (int)SmoothnessMapChannel.AlbedoAlpha)
-                    showSmoothnessScale = true;
-            }*/
-
-            //int indentation = 2; // align with labels of texture properties
-            if (!hasDetailGlossMap && m_WorkflowMode == WorkflowMode.Specular) {
-                m_MaterialEditor.ShaderProperty(detailSpecScale, Styles.detailSpecScaleText);
+                    showDetailSmoothnessScale = true;
             }
+
+            int indentation = 2; // align with labels of texture properties
+            //if (!hasDetailGlossMap && m_WorkflowMode == WorkflowMode.Specular) {
+            //    m_MaterialEditor.ShaderProperty(detailSmoothnessScale, Styles.detailSmoothnessScaleText);
+            //}
+            m_MaterialEditor.ShaderProperty(showDetailSmoothnessScale ? detailSmoothnessScale : detailSmoothness, showDetailSmoothnessScale ? Styles.detailSmoothnessScaleText : Styles.detailSmoothnessText, indentation);
             
-            /*
-            ++indentation;
-            if (smoothnessMapChannel != null)
-                m_MaterialEditor.ShaderProperty(smoothnessMapChannel, Styles.smoothnessMapChannelText, indentation);
-            */
+            //++indentation;
+            //if (smoothnessMapChannel != null)
+            //    m_MaterialEditor.ShaderProperty(smoothnessMapChannel, Styles.smoothnessMapChannelText, indentation);
         }
 
         public static void SetupMaterialWithBlendMode(Material material, BlendMode blendMode)

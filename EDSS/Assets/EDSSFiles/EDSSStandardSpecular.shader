@@ -37,6 +37,7 @@ Shader "EDSS/Specular LERP"
 		_DetailSmoothMapScale("Smoothness Factor", Range(0.0, 1.0)) = 1.0
 		_DetailSpecColor("Detail Spec Color", Color) = (0.2,0.2,0.2)
         _DetailNormalMapScale("Scale", Float) = 1.0
+		_DetailSmoothness("Smoothness", Range(0.0, 1.0)) = 0.5
         _DetailNormalMap("Normal Map", 2D) = "bump" {}
 		
 

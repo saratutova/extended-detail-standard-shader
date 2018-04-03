@@ -36,6 +36,7 @@ Shader "EDSS/Standard LERP"
         _DetailAlbedoMap("Detail Albedo LERP", 2D) = "grey" {}
 		_DetailSpecMap("Detail Spec", 2D) = "grey" {}
         _DetailNormalMapScale("Scale", Float) = 1.0
+		_DetailSmoothness("Smoothness", Range(0.0, 1.0)) = 0.5
         _DetailNormalMap("Normal Map", 2D) = "bump" {}
 
 		[Enum(UV0,0,UV1,1,UV3,3)] _UVSec("UV Set for secondary textures", Float) = 0
