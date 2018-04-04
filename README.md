@@ -13,10 +13,11 @@ The changes made to the code are as&nbsp;follows:
 <li> <b>LERP</b> is now set as the default method of&nbsp;mixing between the primary and secondary maps. I&nbsp;plan to implement a&nbsp;choice between the methods (LERP, MULX2, MUL, ADD), but I’ve hit a&nbsp;wall in this case. Anyone willing to&nbsp;help implementing the function is more than welcome.</li>
 
 <li> The biggest change involves <b>Specular Maps</b> that are now an option for the secondary detail maps. Also, if the Specular Map is not provided, the option is replaced by the choice of a specular colour (just like with the base maps) and a&nbsp;slider controlling the influence of&nbsp;the primary specular map on the secondary detail specularity.</li>
+
+<li>Smothness map for the detail maps are now an option. When no SpecularityMap with Smoothness in Alpha is present, the alpha of the specularity controls the influence of the base SpecMap on the details.</li>
 </ul>
 Planned additions:
 <ul>
-<li>Smoothness map for the detail maps.</li>
 <li>Mixing method choice.</li>
 <li>Implementing similar changes to the metallic variant of the standard shader.</li>
 </ul>
